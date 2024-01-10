@@ -1,0 +1,31 @@
+{
+    "editor.formatOnType": true, 
+    "editor.formatOnSave": true,
+    // 编辑器保存格式化
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "cSpell.words": [
+        "Antdv",
+        "Btns",
+        "Leag",
+        "Leagview",
+        "NACC",
+        "nums",
+        "pinia",
+        "qiankun",
+        "qrcode",
+        "qurpar",
+        "Recordid",
+        "SNMP",
+        "sprivilege",
+        "uniweb",
+        "vueuse",
+        "webconsole"
+    ],
+    "vue.features.codeActions.enable": false,
+    "vue.codeActions.enabled": false,
+    "editor.tabCompletion": "on",
+    "diffEditor.codeLens": true,
+    "MutableAI.upsell": true,
+}
