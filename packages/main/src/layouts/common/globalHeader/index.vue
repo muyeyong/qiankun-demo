@@ -1,6 +1,19 @@
 <template>
-  <div class="globalHeader">头部</div>
+  <div class="globalHeader">
+    <Logo />
+    <Menu />
+    <UserCenter />
+  </div>
 </template>
 
-<script setup lang="ts" name="GlobalHeader"></script>
-<style scoped lang="scss"></style>
+<script setup lang="ts" name="GlobalHeader">
+import Logo from './components/logo.vue'
+import Menu from './components/menu.vue'
+import UserCenter from './components/userCebter.vue'
+</script>
+<style scoped lang="scss">
+.globalHeader {
+  display: flex;
+  align-items: center;
+}
+</style>

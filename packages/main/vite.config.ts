@@ -1,11 +1,10 @@
 import { ConfigEnv, defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
+import { createVitePlugins } from './vite/plugins'
 
 export default defineConfig(({ command }: ConfigEnv) => {
   return {
     base: './',
-    plugins: [vue(), vueJsx()],
+    plugins: createVitePlugins(),
     resolve: {
       alias: {
         '@': '/src'
@@ -23,6 +22,13 @@ export default defineConfig(({ command }: ConfigEnv) => {
               return id.toString().split('node_modules/')[1].split('/')[0].toString()
             }
           }
+        }
+      }
+    },
+    css: {
+      preprocessorOptions: {
+        less: {
+          javascriptEnabled: true
         }
       }
     }

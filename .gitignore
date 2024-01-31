@@ -12,9 +12,9 @@ node_modules
 dist
 dist-ssr
 coverage
-types
+autoTypes
 *.local
-/types/
+/autoTypes/
 .history
 pnpm-lock.yaml
 
