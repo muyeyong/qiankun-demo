@@ -1,0 +1,19 @@
+{
+    "apps": [
+        {
+            "name": "sbuApp1",
+            "devEntry": "",
+            "proEntry": ""
+        },
+        {
+            "name": "sbuApp2",
+            "devEntry": "",
+            "proEntry": ""
+        },
+        {
+            "name": "sbuApp3",
+            "devEntry": "",
+            "proEntry": ""
+        }
+    ]
+}

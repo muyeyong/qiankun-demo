@@ -1,4 +1,5 @@
-export const menu = [
+import { MenuItem } from '@/types'
+export const mockMenu: MenuItem[] = [
   {
     path: '/sub1/demo1',
     label: 'sub1-demo1'

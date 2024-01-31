@@ -1,7 +1,7 @@
 <template>
   <div class="globalHeader">
     <Logo />
-    <Menu />
+    <Menu class="menu" />
     <UserCenter />
   </div>
 </template>
@@ -15,5 +15,8 @@ import UserCenter from './components/userCebter.vue'
 .globalHeader {
   display: flex;
   align-items: center;
+  .menu {
+    flex: 1;
+  }
 }
 </style>

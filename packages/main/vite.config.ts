@@ -1,5 +1,6 @@
 import { ConfigEnv, defineConfig } from 'vite'
 import { createVitePlugins } from './vite/plugins'
+import path from 'path'
 
 export default defineConfig(({ command }: ConfigEnv) => {
   return {
@@ -7,7 +8,8 @@ export default defineConfig(({ command }: ConfigEnv) => {
     plugins: createVitePlugins(),
     resolve: {
       alias: {
-        '@': '/src'
+        '@': '/src',
+        '~': path.resolve(process.cwd())
       }
     },
     build: {
