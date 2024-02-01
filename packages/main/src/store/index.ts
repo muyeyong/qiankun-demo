@@ -10,4 +10,5 @@ export function setupStore(app: App) {
 
 export * from './app'
 export * from './theme'
+export * from './microApp'
 export * from './subscribe'

@@ -3,7 +3,7 @@
     <router-view />
     <!-- 考虑怎么融合到globalContent里面去 -->
     <div
-      v-for="container in microAppContainerMap"
+      v-for="container in microAppsContainerMap"
       :id="container[1].replace('#', '')"
       :key="container[0]"
     ></div>
@@ -11,10 +11,11 @@
 </template>
 
 <script setup lang="ts" name="App">
-import { subscribeStore } from '@/store'
-import { useEvents, useMicro } from '@/hooks'
+import { subscribeStore, useMicroAppStore } from '@/store'
+import { useEvents } from '@/hooks'
 
-const { microAppContainerMap } = useMicro()
+const microStore = useMicroAppStore()
+const { microAppsContainerMap } = storeToRefs(microStore)
 
 subscribeStore()
 useEvents()
