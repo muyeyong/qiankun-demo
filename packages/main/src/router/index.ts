@@ -63,7 +63,6 @@ router.beforeEach((to, from, next) => {
       return next({ name: 'login', query: { redirect: to.fullPath } })
     }
   }
-  console.log(to)
   next()
 })
 

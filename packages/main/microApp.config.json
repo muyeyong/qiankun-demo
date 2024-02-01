@@ -2,17 +2,17 @@
     "apps": [
         {
             "name": "sbuApp1",
-            "devEntry": "",
+            "devEntry": 6210,
             "proEntry": ""
         },
         {
             "name": "sbuApp2",
-            "devEntry": "",
+            "devEntry": 6211,
             "proEntry": ""
         },
         {
             "name": "sbuApp3",
-            "devEntry": "",
+            "devEntry": 6212,
             "proEntry": ""
         }
     ]
