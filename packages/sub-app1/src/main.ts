@@ -20,9 +20,11 @@ function render(props: QiankunMountProps = {}) {
 
 renderWithQiankun({
   bootstrap() {
+    console.log('1')
     return Promise.resolve()
   },
   mount(props: QiankunMountProps) {
+    console.log('2')
     return new Promise((resolve) => {
       render(props)
       resolve()

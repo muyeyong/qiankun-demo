@@ -1,17 +1,17 @@
 {
     "apps": [
         {
-            "name": "sbuApp1",
+            "name": "sub1",
             "devEntry": "/localhost:6210",
             "proEntry": ""
         },
         {
-            "name": "sbuApp2",
+            "name": "sub2",
             "devEntry": "",
             "proEntry": ""
         },
         {
-            "name": "sbuApp3",
+            "name": "sub3",
             "devEntry": "",
             "proEntry": ""
         }

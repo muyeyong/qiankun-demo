@@ -5,7 +5,7 @@ import { isDev } from './env'
 
 /** 判断子应用是否加载 */
 export const isMicroAppLoaded = (app: MicroApp | null | undefined): boolean => {
-  return !app || !app.getStatus || (app && app.getStatus && app.getStatus() === 'NOT_LOADED')
+  return !!(app && 'getStatus' in app)
 }
 
 /** 等待子应用加载完成 */
@@ -13,7 +13,7 @@ export const waitMicroAppLoaded = (app: MicroApp | null | undefined): Promise<vo
   return new Promise(async (resolve, reject) => {
     try {
       if (!app) {
-        return reject()
+        return resolve()
       }
       Promise.all([app.loadPromise, app.bootstrapPromise, app.mountPromise])
         .then(() => {
