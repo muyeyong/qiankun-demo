@@ -27,6 +27,12 @@ export default defineConfig(({ command }: ConfigEnv) => {
         }
       }
     },
+    server: {
+      cors: true,
+      headers: { 'Access-Control-Allow-Origin': '*' }
+      // port: APP_PORT,
+      // hmr: { host: APP_HOST, port: APP_PORT }
+    },
     css: {
       preprocessorOptions: {
         less: {

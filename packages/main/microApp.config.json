@@ -2,12 +2,12 @@
     "apps": [
         {
             "name": "sub1",
-            "devEntry": "/localhost:6210",
+            "devEntry": "//localhost:6210",
             "proEntry": ""
         },
         {
             "name": "sub2",
-            "devEntry": "",
+            "devEntry": "//localhost:6211",
             "proEntry": ""
         },
         {

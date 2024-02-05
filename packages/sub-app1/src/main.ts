@@ -1,4 +1,5 @@
-import { createApp, App } from 'vue'
+import { createApp } from 'vue'
+import type { App } from 'vue'
 import { renderWithQiankun, qiankunWindow } from 'vite-plugin-qiankun/dist/helper'
 import Root from './App.vue'
 import { QiankunMountProps } from '@/types'

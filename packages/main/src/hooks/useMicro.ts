@@ -39,7 +39,7 @@ const useMicro = () => {
           }
         })
         microAppInfo.instance = microApp
-        await waitMicroAppLoaded(microApp)
+        // await waitMicroAppLoaded(microApp)
       }
     } else {
       // 跳转到404
