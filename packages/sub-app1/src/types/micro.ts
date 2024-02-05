@@ -5,5 +5,6 @@ import { StoreDefinition } from 'pinia'
 export interface QiankunMountProps extends QiankunProps {
   globalEvent?: Emitter<Record<EventType, unknown>>
   globalStore?: StoreDefinition
-  to?: string
+  path?: string
+  newPoint?: boolean
 }

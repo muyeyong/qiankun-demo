@@ -5,30 +5,52 @@ import Root from './App.vue'
 import { QiankunMountProps } from '@/types'
 import router from '@/router'
 import { setupStore } from '@/store'
+import event from '@/event'
+import { subscribeGlobalStore } from '@/store'
 
 let app: App | null = null
 
 function render(props: QiankunMountProps = {}) {
-  const { container } = props
-  const app = createApp(Root)
-  setupStore(app)
-  app.use(router)
-  const target: HTMLElement = container
-    ? container.querySelector('#app')!
-    : document.querySelector('#app')!
-  app.mount(target)
+  return new Promise<void>((resolve, reject) => {
+    try {
+      const { container } = props
+      const app = createApp(Root)
+      setupStore(app)
+      app.use(router)
+      const target: HTMLElement = container
+        ? container.querySelector('#app')!
+        : document.querySelector('#app')!
+      app.mount(target)
+      resolve()
+    } catch (error) {
+      reject()
+    }
+  })
 }
 
 renderWithQiankun({
   bootstrap() {
-    console.log('1')
     return Promise.resolve()
   },
   mount(props: QiankunMountProps) {
-    console.log('2')
-    return new Promise((resolve) => {
-      render(props)
-      resolve()
+    return new Promise((resolve, reject) => {
+      try {
+        render(props).then(() => {
+          const { path, globalEvent, globalStore } = props
+          if (path) {
+            router.push(path)
+          }
+          if (globalEvent) {
+            event.override(globalEvent)
+          }
+          if (globalStore) {
+            subscribeGlobalStore(globalStore)
+          }
+          resolve()
+        })
+      } catch (error) {
+        reject(error)
+      }
     })
   },
   unmount(props: QiankunMountProps) {
@@ -41,17 +63,30 @@ renderWithQiankun({
   },
   update(props: QiankunMountProps) {
     return new Promise((resolve, reject) => {
-      const { path } = props
+      const { path, newPoint } = props
       if (path) {
         //  需要确认是否需要新的起点
-        router
-          .push(path)
-          .then(() => {
-            resolve()
+        if (newPoint) {
+          router.push('/empty').then(() => {
+            router
+              .push(path)
+              .then(() => {
+                resolve()
+              })
+              .catch(() => {
+                reject()
+              })
           })
-          .catch(() => {
-            reject()
-          })
+        } else {
+          router
+            .push(path)
+            .then(() => {
+              resolve()
+            })
+            .catch(() => {
+              reject()
+            })
+        }
       }
     })
   }

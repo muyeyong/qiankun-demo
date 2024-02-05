@@ -10,9 +10,13 @@ const useAppStore = defineStore('app', () => {
 
   /** 布局加载完毕 */
 
+  /** 当前显示的应用 */
+  const currentApp = ref<string>('main')
+
   return {
     logged,
-    menuData
+    menuData,
+    currentApp
   }
 })
 

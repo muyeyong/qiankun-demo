@@ -1,4 +1,4 @@
-import { MicroAppConfig, MicroAppJumpConfig } from '../types'
+import { MicroAppJumpConfig } from '../types'
 import { loadMicroApp } from 'qiankun'
 import {
   parseMicroAppRoute,
@@ -9,6 +9,8 @@ import {
   getMicroAppEntry
 } from '@/utils'
 import { useMicroAppStore } from '@/store'
+import event from '@/event'
+import { useGlobalStore } from '../store/global'
 const useMicro = () => {
   const microAppStore = useMicroAppStore()
   const { microAppsInfo } = storeToRefs(microAppStore)
@@ -27,19 +29,21 @@ const useMicro = () => {
       } else {
         const container = getMicroAppContainer(appName)
         const entry = getMicroAppEntry(appName)
-        console.log('container', container, 'entry', entry)
         if (!container || !entry) return
+        const globalStore = useGlobalStore()
         const microApp = loadMicroApp({
           name: appName,
           entry,
           container,
           props: {
             newPoint,
-            path: route
+            path: route,
+            globalEvent: event,
+            globalStore
           }
         })
         microAppInfo.instance = microApp
-        // await waitMicroAppLoaded(microApp)
+        await waitMicroAppLoaded(microApp)
       }
     } else {
       // 跳转到404
