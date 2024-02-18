@@ -8,6 +8,7 @@ const subscribeGlobalStore = (store: any) => {
       (_mutation: any, state: any) => {
         globalStore.currentApp = state.currentApp
         globalStore.cacheComponents = state.cacheComponents
+        globalStore.globalHistoryRecord = state.globalHistoryRecord
       },
       { immediate: true, detached: true }
     )

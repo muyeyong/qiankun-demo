@@ -1,21 +1,23 @@
 <template>
   <div class="main">
     <router-view />
-    <!-- 考虑怎么融合到globalContent里面去 -->
-    <div
-      v-for="container in microAppsContainerMap"
-      :id="container[1].replace('#', '')"
-      :key="container[0]"
-    ></div>
+    <div :style="{ ...commonContentStyles, ...microAppContentStyles }">
+      <div
+        v-for="container in microAppsContainerMap"
+        :id="container[1].replace('#', '')"
+        :key="container[0]"
+      ></div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts" name="App">
 import { subscribeStore, useMicroAppStore } from '@/store'
-import { useEvents } from '@/hooks'
+import { useEvents, useTheme } from '@/hooks'
 
 const microStore = useMicroAppStore()
 const { microAppsContainerMap } = storeToRefs(microStore)
+const { microAppContentStyles, commonContentStyles } = useTheme()
 
 subscribeStore()
 useEvents()

@@ -9,13 +9,20 @@
 <script setup lang="ts" name="menu">
 import { useAppStore } from '@/store'
 import { useMicro } from '@/hooks'
+import { taskQueue, TaskPriority } from '@/utils/taskQueue'
 
 const appStore = useAppStore()
 const { menuData } = storeToRefs(appStore)
 const { goMicroApp } = useMicro()
 
 const jump = (path: string) => {
-  goMicroApp({ path })
+  taskQueue.addTask({
+    id: path,
+    priority: TaskPriority.Medium,
+    callback: async () => {
+      await goMicroApp({ path })
+    }
+  })
 }
 </script>
 <style scoped lang="scss">

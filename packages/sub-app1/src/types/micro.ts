@@ -8,3 +8,9 @@ export interface QiankunMountProps extends QiankunProps {
   path?: string
   newPoint?: boolean
 }
+
+/** 全局历史记录 */
+
+export interface GlobalHistoryRecord {
+  path: string
+}

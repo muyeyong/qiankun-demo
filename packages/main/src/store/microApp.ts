@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { apps } from '~/microApp.config.json'
-import { MicroAppInfo } from '@/types'
+import { MicroAppInfo, MicroAppRouteParams } from '@/types'
 
 const useMicroAppStore = defineStore('microApp', () => {
   // 记录子应用信息
@@ -16,8 +16,12 @@ const useMicroAppStore = defineStore('microApp', () => {
     })
     return microAppContainerMap
   })
+
+  /** 协助跳转信息 */
+  const helpJumpInfo = ref<{ to?: MicroAppRouteParams; from?: MicroAppRouteParams }>({})
   return {
     microAppsInfo,
+    helpJumpInfo,
     microAppsContainerMap
   }
 })

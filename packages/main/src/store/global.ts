@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
-import { useAppStore } from './app'
 import { useMicroAppStore } from './microApp'
+import { GlobalHistoryRecord } from '@/types'
 const useGlobalStore = defineStore('global', () => {
-  const appStore = useAppStore()
   const microAppStore = useMicroAppStore()
   const cacheComponents = computed(() => {
     const components: Array<{ appName: string; components: string[] }> = []
@@ -15,13 +14,16 @@ const useGlobalStore = defineStore('global', () => {
     return components
   })
 
-  const currentApp = computed(() => {
-    return appStore.currentApp
-  })
+  /** 当前显示的应用 */
+  const currentApp = ref<string>('main')
+
+  /** 全局历史记录 */
+  const globalHistoryRecord = ref<GlobalHistoryRecord[]>([])
 
   return {
     currentApp,
-    cacheComponents
+    cacheComponents,
+    globalHistoryRecord
   }
 })
 
