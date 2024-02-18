@@ -1,27 +1,19 @@
+import { useGlobalStore } from '../global'
+
 const subscribeGlobalStore = (store: any) => {
   const scope = effectScope()
-  console.log('store', store)
+  const globalStore = useGlobalStore()
   scope.run(() => {
-    watch(
-      () => store.currentApp,
-      (value) => {
-        console.log('currentApp', value)
+    store.$subscribe(
+      (_mutation: any, state: any) => {
+        globalStore.currentApp = state.currentApp
+        globalStore.cacheComponents = state.cacheComponents
       },
-      {
-        immediate: true,
-        deep: true
-      }
+      { immediate: true, detached: true }
     )
-    watch(
-      () => store.cacheComponents,
-      (value) => {
-        console.log('cacheComponents', value)
-      },
-      {
-        immediate: true,
-        deep: true
-      }
-    )
+  })
+  onScopeDispose(() => {
+    scope.stop()
   })
 }
 

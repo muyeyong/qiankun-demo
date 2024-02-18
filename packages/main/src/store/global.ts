@@ -14,8 +14,13 @@ const useGlobalStore = defineStore('global', () => {
     }
     return components
   })
+
+  const currentApp = computed(() => {
+    return appStore.currentApp
+  })
+
   return {
-    currentApp: appStore.currentApp,
+    currentApp,
     cacheComponents
   }
 })

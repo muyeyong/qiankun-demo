@@ -8,7 +8,7 @@ import {
   getMicroAppContainer,
   getMicroAppEntry
 } from '@/utils'
-import { useMicroAppStore } from '@/store'
+import { useAppStore, useMicroAppStore } from '@/store'
 import event from '@/event'
 import { useGlobalStore } from '../store/global'
 const useMicro = () => {
@@ -30,7 +30,7 @@ const useMicro = () => {
         const container = getMicroAppContainer(appName)
         const entry = getMicroAppEntry(appName)
         if (!container || !entry) return
-        const globalStore = useGlobalStore()
+        const globalStore = useAppStore() //useGlobalStore()
         const microApp = loadMicroApp({
           name: appName,
           entry,
