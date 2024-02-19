@@ -1,6 +1,14 @@
 <template>
-  <div class="globalBreadcrumb">全局面包屑</div>
+  <a-breadcrumb class="globalBreadcrumb">
+    <a-breadcrumb-item v-for="item in breadcrumb" :key="item.label">{{
+      item.label
+    }}</a-breadcrumb-item>
+  </a-breadcrumb>
 </template>
 
-<script setup lang="ts" name="GlobalBreadcrumb"></script>
+<script setup lang="ts" name="GlobalBreadcrumb">
+import { useAppStore } from '@/store'
+const appStore = useAppStore()
+const { breadcrumb } = storeToRefs(appStore)
+</script>
 <style scoped lang="scss"></style>

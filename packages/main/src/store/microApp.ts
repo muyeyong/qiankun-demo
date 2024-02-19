@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { apps } from '~/microApp.config.json'
-import { MicroAppInfo, MicroAppRouteParams } from '@/types'
+import { MicroAppInfo } from '@/types'
+import { RouteLocationNormalized } from 'vue-router'
 
 const useMicroAppStore = defineStore('microApp', () => {
   // 记录子应用信息
@@ -18,7 +19,7 @@ const useMicroAppStore = defineStore('microApp', () => {
   })
 
   /** 协助跳转信息 */
-  const helpJumpInfo = ref<{ to?: MicroAppRouteParams; from?: MicroAppRouteParams }>({})
+  const helpJumpInfo = ref<{ to?: RouteLocationNormalized; from?: RouteLocationNormalized }>({})
   return {
     microAppsInfo,
     helpJumpInfo,

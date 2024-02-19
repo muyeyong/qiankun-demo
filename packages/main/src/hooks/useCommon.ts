@@ -1,13 +1,15 @@
 import { getMenuDataReq } from '@/api'
 import { useAppStore, useGlobalStore, useMicroAppStore } from '../store'
 import event from '../event'
-import { MicroAppRouteParams } from '../types'
+import { RouteLocationNormalized } from 'vue-router'
+import { findMenuPathByRoute, isSubOrSupRoute } from '../utils'
 const useCommon = () => {
   const appStore = useAppStore()
   const globalStore = useGlobalStore()
   const microAppStore = useMicroAppStore()
   const { globalHistoryRecord } = globalStore
   const { microAppsInfo } = microAppStore
+
   /** 设置菜单 */
   const setMenuData = async () => {
     const res = await getMenuDataReq()
@@ -22,10 +24,18 @@ const useCommon = () => {
   }
 
   /** 更新面包屑 */
-  const updateBreadcrumb = (to: MicroAppRouteParams) => {
+  const updateBreadcrumb = (to: RouteLocationNormalized) => {
+    const { breadcrumb } = appStore
+    const menus = findMenuPathByRoute(appStore.menuData, to.path)
+    console.log('menus', menus)
+    /** 判断to是不是菜单 */
     /** 是否是子页面 */
-    /** 跳转到其他页面 */
-    /** 跳转不知名页面 */
+    // isSubOrSupRoute(breadcrumb)
+    if (breadcrumb.length === 0) {
+    } else {
+      /** 跳转到其他页面 */
+      /** 跳转不知名页面 */
+    }
   }
 
   /** 更新子应用缓存页面信息 */
@@ -50,13 +60,10 @@ const useCommon = () => {
   }
 
   /** 更新历史记录 */
-  const updateHistoryRecord = (info: MicroAppRouteParams) => {
-    if (
-      info.route.name === 'empty' &&
-      globalHistoryRecord.some((item) => item.path === info.route.fullPath)
-    )
+  const updateHistoryRecord = (info: RouteLocationNormalized) => {
+    if (info.name === 'empty' && globalHistoryRecord.some((item) => item.path === info.fullPath))
       return
-    const path = info.route.fullPath
+    const path = info.fullPath
     globalHistoryRecord.push({
       path
     })

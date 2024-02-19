@@ -1,29 +1,32 @@
 import { storeToRefs } from 'pinia'
-import { useThemeStore, useGlobalStore } from '@/store'
+import { useThemeStore, useGlobalStore, useAppStore } from '@/store'
 import { computed } from 'vue'
 
 const useTheme = () => {
   const themeStore = useThemeStore()
-  const { header, tab, breadcrumb } = storeToRefs(themeStore)
+  const { headerSet, tabSet, breadcrumbSet } = storeToRefs(themeStore)
   const globalStore = useGlobalStore()
   const { currentApp } = storeToRefs(globalStore)
+  const appStore = useAppStore()
+  const { breadcrumb } = appStore
   const headerStyles = computed(() => ({
-    height: `${header.value.height}px`,
-    lineHeight: `${header.value.height}px`
+    height: `${headerSet.value.height}px`,
+    lineHeight: `${headerSet.value.height}px`
   }))
 
   const tabStyles = computed(() => ({
-    height: `${tab.value.height}px`,
-    lineHeight: `${tab.value.height}px`
+    height: `${tabSet.value.height}px`,
+    lineHeight: `${tabSet.value.height}px`
   }))
 
   const breadcrumbStyles = computed(() => ({
-    height: `${breadcrumb.value.height}px`,
-    lineHeight: `${breadcrumb.value.height}px`
+    height: `${breadcrumbSet.value.height}px`,
+    lineHeight: `${breadcrumbSet.value.height}px`,
+    display: breadcrumb.length > 0 ? 'block' : 'none'
   }))
 
   const commonContentStyles = computed(() => ({
-    height: `calc(100vh - ${header.value.height}px - ${tab.value.height}px - ${breadcrumb.value.height}px)`
+    height: `calc(100vh - ${headerSet.value.height}px - ${tabSet.value.height}px - ${breadcrumbSet.value.height}px)`
   }))
 
   const mainContentStyles = computed(() => ({

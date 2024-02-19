@@ -1,8 +1,8 @@
 import mitt, { Emitter } from 'mitt'
-import { MicroAppRouteParams } from '@/types'
+import { RouteLocationNormalized } from 'vue-router'
 
 type Events = {
-  microAppRouteJump: { to: MicroAppRouteParams; from: MicroAppRouteParams }
+  microAppRouteJump: { to: RouteLocationNormalized; from: RouteLocationNormalized; jumped: boolean }
   hideMicroApp: string
 }
 

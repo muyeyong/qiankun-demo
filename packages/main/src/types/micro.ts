@@ -1,5 +1,6 @@
 import { MicroApp } from 'qiankun'
 import { RouteLocationNormalized } from 'vue-router'
+import { PageJumpType } from '../constant'
 
 /** 子应用配置 */
 export interface MicroAppConfig {
@@ -11,6 +12,7 @@ export interface MicroAppConfig {
 /** 跳转参数配置 */
 export interface MicroAppJumpConfig {
   path: string
+  jumpType?: PageJumpType
   newPoint?: boolean
 }
 
@@ -23,10 +25,4 @@ export interface MicroAppInfo {
 /** 全局历史记录 */
 export interface GlobalHistoryRecord {
   path: string
-}
-
-/** 子应用路由路由跳转参数 */
-export interface MicroAppRouteParams {
-  route: RouteLocationNormalized
-  jumped?: boolean
 }

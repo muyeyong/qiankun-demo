@@ -10,6 +10,7 @@
 import { useAppStore } from '@/store'
 import { useMicro } from '@/hooks'
 import { taskQueue, TaskPriority } from '@/utils/taskQueue'
+import { PageJumpType } from '@/constant'
 
 const appStore = useAppStore()
 const { menuData } = storeToRefs(appStore)
@@ -20,7 +21,7 @@ const jump = (path: string) => {
     id: path,
     priority: TaskPriority.Medium,
     callback: async () => {
-      await goMicroApp({ path })
+      await goMicroApp({ path, jumpType: PageJumpType.Menu })
     }
   })
 }

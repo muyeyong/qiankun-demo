@@ -11,14 +11,14 @@ const useEvents = () => {
   })
 
   event.on('microAppRouteJump', (args) => {
-    const { to, from } = args
+    const { to, from, jumped } = args
     /** 是否是跳转到empty页面 */
-    if (to.route.name === 'empty') {
+    if (to.name === 'empty') {
       handleEmptyJump(to, from)
-    } else if (isHistoryJump(to.route.fullPath)) {
-      handleGlobalRouteBack(to, from)
+    } else if (isHistoryJump(to.fullPath)) {
+      handleGlobalRouteBack(to, from, jumped)
     } else {
-      handleGlobalRouteJump(to, from)
+      handleGlobalRouteJump(to, from, jumped)
     }
   })
 }

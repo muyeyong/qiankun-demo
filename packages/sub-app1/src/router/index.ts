@@ -46,10 +46,23 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const globalStore = useGlobalStore()
-  const { currentApp } = storeToRefs(globalStore)
-  if (currentApp.value === APP_NAME) {
+  const { currentApp } = globalStore
+  if (currentApp === APP_NAME && to.fullPath !== from.fullPath) {
+    const inThisApp = !(to.name === 'notFound')
     /** 如果返回的是空页面，并且存在历史记录。那么直接跳转到历史记录上去 */
-    event.emit('microAppRouteJump', { to, from, jumped: !(to.name === 'notFound') })
+    event.emit('microAppRouteJump', {
+      to: {
+        ...to,
+        path: inThisApp ? `/${APP_NAME}${to.path}` : to.path,
+        fullPath: inThisApp ? `/${APP_NAME}${to.fullPath}` : to.fullPath
+      },
+      from: {
+        ...from,
+        path: inThisApp ? `/${APP_NAME}${from.path}` : from.path,
+        fullPath: inThisApp ? `/${APP_NAME}${from.fullPath}` : from.fullPath
+      },
+      jumped: inThisApp
+    })
   }
   if (to.name === 'noFound') next(false)
   else next()
