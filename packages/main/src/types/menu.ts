@@ -1,6 +1,8 @@
+import { GlobalHistoryRecord } from './micro'
+
 /** 菜单项 */
 export interface MenuItem {
-  path: string
+  path?: string
   label: string
   children?: MenuItem[]
 }
@@ -8,4 +10,15 @@ export interface MenuItem {
 /** 面包屑 */
 export interface Breadcrumb extends Pick<MenuItem, 'label' | 'path'> {
   history: Pick<Breadcrumb, 'label' | 'path'>[]
+  isMenu: boolean
+  rawPath?: string
+  rawLabel: string
+}
+
+/** tab */
+export interface Tab extends Pick<MenuItem, 'label' | 'path'> {
+  breadcrumb: Breadcrumb[]
+  globalHistoryRecord: GlobalHistoryRecord[]
+  rawPath?: string
+  rawLabel: string
 }

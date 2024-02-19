@@ -16,7 +16,8 @@ const appStore = useAppStore()
 const { menuData } = storeToRefs(appStore)
 const { goMicroApp } = useMicro()
 
-const jump = (path: string) => {
+const jump = (path?: string) => {
+  if (!path) return
   taskQueue.addTask({
     id: path,
     priority: TaskPriority.Medium,

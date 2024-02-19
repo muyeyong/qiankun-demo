@@ -33,6 +33,35 @@ export default function subscribeAppStore() {
         }
       }
     )
+
+    watch(
+      () => appStore.breadcrumb,
+      (value) => {
+        const target = value.reverse().find((item) => item.isMenu)
+        if (target) {
+          if (!appStore.tabs.some((item) => item.rawPath === target.rawPath)) {
+            appStore.tabs.push({
+              label: target.label,
+              path: target.path,
+              globalHistoryRecord: [],
+              breadcrumb: [],
+              rawLabel: target.rawLabel,
+              rawPath: target.rawPath
+            })
+          } else {
+            appStore.tabs = appStore.tabs.map((item) => {
+              if (item.rawPath === target.rawPath) {
+                return {
+                  ...item,
+                  path: target.path
+                }
+              }
+              return item
+            })
+          }
+        }
+      }
+    )
   })
 
   onScopeDispose(() => {

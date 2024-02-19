@@ -19,6 +19,8 @@ const useMicro = () => {
   const { microAppsInfo, helpJumpInfo } = storeToRefs(microAppStore)
   const appStore = useAppStore()
   const { pageJumpType } = storeToRefs(appStore)
+  const globalStore = useGlobalStore()
+  const { globalHistoryRecord } = storeToRefs(globalStore)
   const {
     isHistoryJump,
     updateMicroAppCachePage,
@@ -31,7 +33,7 @@ const useMicro = () => {
   const goMicroApp = async (args: MicroAppJumpConfig) => {
     //传入路径path 以及一些参数
     /** 初始化: 将一些全局共享库 全局通信传递下去 */
-    const globalStore = useGlobalStore()
+
     const preAppName = globalStore.currentApp
     try {
       const { path, newPoint, jumpType } = args
@@ -114,9 +116,9 @@ const useMicro = () => {
         hideMicroApp(parseMicroAppRoute(from.fullPath)[0])
       }
       /** 更新历史记录 */
-      if (pageJumpType.value === PageJumpType.Default) updateHistoryRecord(from)
+      updateHistoryRecord(to, from)
       /** 更新面包屑 */
-      updateBreadcrumb(to)
+      updateBreadcrumb(to, from)
       /** 更新子应用的信息: 需要缓存那些页面 */
       updateMicroAppCachePage({
         appName: parseMicroAppRoute(to.fullPath)[0],
@@ -134,7 +136,38 @@ const useMicro = () => {
     jumped: boolean
   ) => {
     /** 是否成功跳转 */
-    /** 全局历史记录 -1 */
+    if (!jumped) {
+      helpJumpInfo.value = { to, from }
+      taskQueue.addTask({
+        priority: TaskPriority.Medium,
+        id: to.fullPath,
+        callback: async () => {
+          await goMicroApp({
+            path: to.fullPath,
+            newPoint: true
+          })
+        }
+      })
+    } else {
+      /** 判断是否是协助跳转 */
+      const isHelpJump = helpJumpInfo.value.to?.fullPath === to.fullPath
+      if (isHelpJump) {
+        from = helpJumpInfo.value.from!
+      }
+      /** 更新历史记录 */
+      updateHistoryRecord(to, from)
+      /** 更新面包屑 */
+      updateBreadcrumb(to, from)
+      /** 更新子应用的信息: 需要缓存那些页面 */
+      /** 更新子应用的信息: 需要缓存那些页面 */
+      updateMicroAppCachePage({
+        appName: parseMicroAppRoute(from.fullPath)[0],
+        componentName: from.name as string,
+        type: 'del'
+      })
+      helpJumpInfo.value = {}
+      pageJumpType.value = PageJumpType.Default
+    }
   }
   return {
     goMicroApp,

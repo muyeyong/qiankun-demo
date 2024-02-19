@@ -62,15 +62,18 @@ export const getMicroAppEntry = (appName: string): string | undefined => {
 }
 
 /** 判断路由是否是上下级关系 */
-export const isSubOrSupRoute = (r1: string[], r2: string[]) => {
-  if (r1.length === 0 || r2.length === 0) return false
+export const isSubOrSupRoute = (r1?: string, r2?: string) => {
+  if (!r1 || !r2) return false
+  const rr1 = r1.split('/')
+  const rr2 = r2.split('/')
+  if (rr1.length === 0 || rr2.length === 0) return false
   let i = 0
   let j = 0
-  for (; i < r1.length, j < r2.length; i++, j++) {
-    if (r1[i] !== r2[j]) break
+  for (; i < rr1.length, j < rr2.length; i++, j++) {
+    if (rr1[i] !== rr2[j]) break
   }
-  if (i === r1.length && j === r2.length - 1) return true
-  if (j === r2.length && i === r1.length - 1) return true
+  if (i === rr1.length && j === rr2.length - 1) return true
+  if (j === rr2.length && i === rr1.length - 1) return true
   return false
 }
 

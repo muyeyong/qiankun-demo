@@ -8,7 +8,7 @@ const useTheme = () => {
   const globalStore = useGlobalStore()
   const { currentApp } = storeToRefs(globalStore)
   const appStore = useAppStore()
-  const { breadcrumb } = appStore
+  const { breadcrumb } = storeToRefs(appStore)
   const headerStyles = computed(() => ({
     height: `${headerSet.value.height}px`,
     lineHeight: `${headerSet.value.height}px`
@@ -22,7 +22,7 @@ const useTheme = () => {
   const breadcrumbStyles = computed(() => ({
     height: `${breadcrumbSet.value.height}px`,
     lineHeight: `${breadcrumbSet.value.height}px`,
-    display: breadcrumb.length > 0 ? 'block' : 'none'
+    display: breadcrumb.value.length > 0 ? 'block' : 'none'
   }))
 
   const commonContentStyles = computed(() => ({

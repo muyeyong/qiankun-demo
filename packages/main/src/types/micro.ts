@@ -1,5 +1,4 @@
 import { MicroApp } from 'qiankun'
-import { RouteLocationNormalized } from 'vue-router'
 import { PageJumpType } from '../constant'
 
 /** 子应用配置 */

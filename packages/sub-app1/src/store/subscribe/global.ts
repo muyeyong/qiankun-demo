@@ -6,6 +6,7 @@ const subscribeGlobalStore = (store: any) => {
   scope.run(() => {
     store.$subscribe(
       (_mutation: any, state: any) => {
+        console.log(state)
         globalStore.currentApp = state.currentApp
         globalStore.cacheComponents = state.cacheComponents
         globalStore.globalHistoryRecord = state.globalHistoryRecord

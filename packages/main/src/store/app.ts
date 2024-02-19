@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { MenuItem, Breadcrumb } from '../types'
+import { MenuItem, Breadcrumb, Tab } from '../types'
 import { PageJumpType } from '@/constant'
 
 const useAppStore = defineStore('app', () => {
@@ -16,11 +16,15 @@ const useAppStore = defineStore('app', () => {
   /** 菜单跳转类型 */
   const pageJumpType = ref<PageJumpType>(PageJumpType.Default)
 
+  /** tabs */
+  const tabs = ref<Tab[]>([])
+
   return {
     logged,
     menuData,
     breadcrumb,
-    pageJumpType
+    pageJumpType,
+    tabs
   }
 })
 
