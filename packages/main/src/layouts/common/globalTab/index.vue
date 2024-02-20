@@ -1,7 +1,9 @@
 <template>
   <div class="globalTab">
     <left-outlined v-show="globalHistoryRecord.length > 0" @click="back" />
-    <a-tag v-for="tab in tabs" :key="tab.rawPath">{{ tab.label }}</a-tag>
+    <a-tag v-for="tab in tabs" :key="tab.rawPath" style="cursor: pointer" @click="switchTab(tab)">{{
+      tab.label
+    }}</a-tag>
   </div>
 </template>
 
@@ -11,9 +13,10 @@ import { LeftOutlined } from '@ant-design/icons-vue'
 import { taskQueue, TaskPriority } from '@/utils/taskQueue'
 import { useMicro } from '@/hooks'
 import { PageJumpType } from '@/constant'
+import { Tab } from '@/types'
 
 const appStore = useAppStore()
-const { tabs } = storeToRefs(appStore)
+const { tabs, breadcrumb } = storeToRefs(appStore)
 const globalStore = useGlobalStore()
 const { globalHistoryRecord } = storeToRefs(globalStore)
 const { goMicroApp } = useMicro()
@@ -27,6 +30,20 @@ const back = () => {
     priority: TaskPriority.Medium,
     callback: async () => {
       await goMicroApp({ path: lastRecord.path, jumpType: PageJumpType.Back })
+    }
+  })
+}
+
+/** 切换tab */
+const switchTab = (tab: Tab) => {
+  const { path } = tab
+  const currPage = breadcrumb.value.reverse().find((item) => item.isMenu)
+  if (currPage?.path === path) return
+  taskQueue.addTask({
+    id: path!,
+    priority: TaskPriority.Medium,
+    callback: async () => {
+      await goMicroApp({ path: path!, jumpType: PageJumpType.Tab })
     }
   })
 }

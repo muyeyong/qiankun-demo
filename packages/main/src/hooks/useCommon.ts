@@ -34,8 +34,6 @@ const useCommon = () => {
     const menus = findMenuPathByRoute(appStore.menuData, to.path)
     if (pageJumpType.value === PageJumpType.Default) {
       /** 判断to是不是菜单 */
-
-      // isSubOrSupRoute(breadcrumb)
       if (breadcrumb.value.length === 0 && menus && menus.length > 0) {
         breadcrumb.value = menus.map((item) => ({
           label: item.label,
