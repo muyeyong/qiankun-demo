@@ -7,6 +7,7 @@ import router from '@/router'
 import { setupStore } from '@/store'
 import event from '@/event'
 import { subscribeGlobalStore } from '@/store'
+import { useAppStore } from './store/app'
 
 let app: App | null = null
 
@@ -16,13 +17,13 @@ function render(props: QiankunMountProps = {}) {
       const { container, globalEvent, globalStore } = props
       const app = createApp(Root)
       setupStore(app)
-      setupStore(app)
       if (globalEvent) {
         event.override(globalEvent)
       }
       if (globalStore) {
         subscribeGlobalStore(globalStore)
       }
+
       app.use(router)
       const target: HTMLElement = container
         ? container.querySelector('#app')!
@@ -65,10 +66,13 @@ renderWithQiankun({
   update(props: QiankunMountProps) {
     return new Promise((resolve, reject) => {
       const { path, newPoint } = props
+      const appStore = useAppStore()
       if (path) {
         //  需要确认是否需要新的起点
         if (newPoint) {
+          appStore.noReportRoute = true
           router.push('/empty').then(() => {
+            appStore.noReportRoute = false
             router
               .push(path)
               .then(() => {
@@ -76,6 +80,9 @@ renderWithQiankun({
               })
               .catch(() => {
                 reject()
+              })
+              .finally(() => {
+                appStore.noReportRoute = false
               })
           })
         } else {
