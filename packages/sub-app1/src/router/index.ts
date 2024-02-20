@@ -25,7 +25,15 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/demo2',
     name: 'demo2',
+    meta: {
+      keepAlive: false
+    },
     component: () => import('@/pages/demo2.vue')
+  },
+  {
+    path: '/demo2/detail',
+    name: 'demo2Detail',
+    component: () => import('@/pages/demo2Detail.vue')
   },
   {
     path: '/empty',

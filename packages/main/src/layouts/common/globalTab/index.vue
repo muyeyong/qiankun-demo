@@ -26,7 +26,7 @@ const back = () => {
     id: lastRecord.path,
     priority: TaskPriority.Medium,
     callback: async () => {
-      await goMicroApp({ path: lastRecord.path, jumpType: PageJumpType.Tab })
+      await goMicroApp({ path: lastRecord.path, jumpType: PageJumpType.Back })
     }
   })
 }

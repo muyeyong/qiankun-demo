@@ -16,11 +16,11 @@ import { RouteLocationNormalized } from 'vue-router'
 import { PageJumpType } from '../constant'
 const useMicro = () => {
   const microAppStore = useMicroAppStore()
-  const { microAppsInfo, helpJumpInfo } = storeToRefs(microAppStore)
+  const { helpJumpInfo } = storeToRefs(microAppStore)
   const appStore = useAppStore()
-  const { pageJumpType } = storeToRefs(appStore)
+  const { pageJumpType, tabs, breadcrumb } = storeToRefs(appStore)
   const globalStore = useGlobalStore()
-  const { globalHistoryRecord } = storeToRefs(globalStore)
+  const { microAppsInfo, globalHistoryRecord } = storeToRefs(globalStore)
   const {
     isHistoryJump,
     updateMicroAppCachePage,
@@ -31,12 +31,18 @@ const useMicro = () => {
 
   /** 跳转子应用 */
   const goMicroApp = async (args: MicroAppJumpConfig) => {
-    //传入路径path 以及一些参数
+    let { path } = args
+    const { newPoint, jumpType } = args
     /** 初始化: 将一些全局共享库 全局通信传递下去 */
-
     const preAppName = globalStore.currentApp
+    // 是否存在之前的记录，跳转记录 历史记录都需要重新确认
+    if (jumpType !== PageJumpType.Back) {
+      const preTab = tabs.value.find((item) => item.path === path || item.rawPath === path)
+      if (preTab) {
+        path = preTab.path ?? path
+      }
+    }
     try {
-      const { path, newPoint, jumpType } = args
       const [appName, route] = parseMicroAppRoute(path)
       pageJumpType.value = jumpType ?? PageJumpType.Default
       if (isMicroAppExist(appName)) {

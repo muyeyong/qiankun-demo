@@ -1,3 +1,4 @@
+import { APP_NAME } from '~/vite/constant'
 import { useGlobalStore } from '../global'
 
 const subscribeGlobalStore = (store: any) => {
@@ -6,9 +7,9 @@ const subscribeGlobalStore = (store: any) => {
   scope.run(() => {
     store.$subscribe(
       (_mutation: any, state: any) => {
-        console.log(state)
+        console.log(state, 11, state.microAppsInfo.get(APP_NAME)?.components)
         globalStore.currentApp = state.currentApp
-        globalStore.cacheComponents = state.cacheComponents
+        globalStore.cacheComponents = state.microAppsInfo.get(APP_NAME)?.components
         globalStore.globalHistoryRecord = state.globalHistoryRecord
       },
       { immediate: true, detached: true }

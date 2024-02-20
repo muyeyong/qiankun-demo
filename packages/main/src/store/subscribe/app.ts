@@ -60,7 +60,8 @@ export default function subscribeAppStore() {
             })
           }
         }
-      }
+      },
+      { deep: true }
     )
   })
 

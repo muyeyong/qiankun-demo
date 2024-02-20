@@ -1,6 +1,7 @@
 import { QiankunProps } from 'vite-plugin-qiankun/dist/helper'
 import { Emitter, EventType } from 'mitt'
 import { StoreDefinition } from 'pinia'
+import { MicroApp } from 'qiankun'
 
 export interface QiankunMountProps extends QiankunProps {
   globalEvent?: Emitter<Record<EventType, unknown>>
@@ -13,4 +14,10 @@ export interface QiankunMountProps extends QiankunProps {
 
 export interface GlobalHistoryRecord {
   path: string
+}
+
+/** 子应用信息 */
+export interface MicroAppInfo {
+  instance: MicroApp | null
+  components: string[]
 }

@@ -8,9 +8,8 @@ import { cloneDeep } from 'lodash-es'
 const useCommon = () => {
   const appStore = useAppStore()
   const globalStore = useGlobalStore()
-  const microAppStore = useMicroAppStore()
   const { globalHistoryRecord } = storeToRefs(globalStore)
-  const { microAppsInfo } = microAppStore
+  const { microAppsInfo } = globalStore
   const { breadcrumb, pageJumpType, tabs } = storeToRefs(appStore)
 
   /** 设置菜单 */

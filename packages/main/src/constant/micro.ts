@@ -6,6 +6,8 @@ export enum PageJumpType {
   Breadcrumb,
   /** tab跳转 */
   Tab,
+  /** 返回 */
+  Back,
   /** 默认跳转 */
   Default
 }

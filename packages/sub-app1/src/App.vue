@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <router-view v-slot="{ Component }">
-      <keep-alive> <component :is="Component" /> </keep-alive>
+      <keep-alive :include="cacheComponents"> <component :is="Component" /> </keep-alive>
     </router-view>
   </div>
 </template>
@@ -22,11 +22,14 @@ onMounted(() => {
   })
 })
 
-// const selfCacheComponents = computed(() =>
-//   cacheComponents.value
-//     .filter((item) => item.appName === APP_NAME)
-//     .map((item) => item.components)
-//     .flat()
-// )
+// const cacheComponents = computed(() => microAppsInfo.value.get(APP_NAME)?.components)
+
+watch(
+  () => globalStore.microAppsInfo,
+  (value) => {
+    console.log(value, 22)
+  },
+  { deep: true }
+)
 </script>
 <style scoped lang="scss"></style>

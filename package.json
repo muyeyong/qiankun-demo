@@ -21,7 +21,8 @@
 		"vite-plugin-compression": "^0.5.1",
 		"vite-plugin-progress": "^0.0.6",
 		"vite-plugin-vue-setup-extend": "^0.4.0",
-		"vue": "3.4.5"
+		"vue": "3.4.5",
+		"qiankun": "^2.10.16"
 	},
 	"dependencies": {
 		"@ant-design/icons-vue": "6.1.0",

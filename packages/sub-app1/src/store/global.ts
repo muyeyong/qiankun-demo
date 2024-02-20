@@ -1,14 +1,16 @@
 import { defineStore } from 'pinia'
-import { GlobalHistoryRecord } from '@/types'
+import { GlobalHistoryRecord, MicroAppInfo } from '@/types'
 
 const useGlobalStore = defineStore('global', () => {
   const currentApp = ref()
-  const cacheComponents = ref<Array<{ appName: string; components: string[] }>>([])
+  const microAppsInfo = ref<Map<string, MicroAppInfo>>(new Map())
   const globalHistoryRecord = ref<GlobalHistoryRecord[]>([])
+  const cacheComponents = ref<string[]>([])
   return {
     currentApp,
-    cacheComponents,
-    globalHistoryRecord
+    microAppsInfo,
+    globalHistoryRecord,
+    cacheComponents
   }
 })
 

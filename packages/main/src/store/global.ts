@@ -1,18 +1,13 @@
 import { defineStore } from 'pinia'
-import { useMicroAppStore } from './microApp'
 import { GlobalHistoryRecord } from '@/types'
+import { apps } from '~/microApp.config.json'
+import { MicroAppInfo } from '@/types'
+
 const useGlobalStore = defineStore('global', () => {
-  const microAppStore = useMicroAppStore()
-  const cacheComponents = computed(() => {
-    const components: Array<{ appName: string; components: string[] }> = []
-    for (const [appName, appInfo] of microAppStore.microAppsInfo.entries()) {
-      components.push({
-        appName: appName,
-        components: appInfo.components
-      })
-    }
-    return components
-  })
+  // 记录子应用信息
+  const microAppsInfo: Map<string, MicroAppInfo> = reactive(
+    new Map(apps.map((app) => [app.name, { instance: null, components: [] }]))
+  )
 
   /** 当前显示的应用 */
   const currentApp = ref<string>('main')
@@ -22,7 +17,7 @@ const useGlobalStore = defineStore('global', () => {
 
   return {
     currentApp,
-    cacheComponents,
+    microAppsInfo,
     globalHistoryRecord
   }
 })
