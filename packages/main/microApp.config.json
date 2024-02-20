@@ -9,11 +9,6 @@
             "name": "sub2",
             "devEntry": "//localhost:6211",
             "proEntry": ""
-        },
-        {
-            "name": "sub3",
-            "devEntry": "",
-            "proEntry": ""
         }
     ]
 }

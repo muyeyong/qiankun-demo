@@ -1,9 +1,8 @@
 <template>
   <div class="Demo1Detail">这是一个Demo1的详情页</div>
-  <a-button type="primary" @click="router.back()">Route.back返回</a-button>
 </template>
 
 <script setup lang="ts" name="demo1Detail">
-const router = useRouter()
+// test
 </script>
 <style scoped lang="scss"></style>

@@ -3,7 +3,6 @@ import { createRouter, createWebHistory, RouteRecordRaw, createMemoryHistory } f
 import event from '@/event'
 import { useGlobalStore } from '@/store'
 import { APP_NAME } from '~/vite/constant'
-import { useAppStore } from '../store/app'
 
 const history = qiankunWindow.__POWERED_BY_QIANKUN__ ? createMemoryHistory() : createWebHistory()
 
@@ -55,15 +54,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const globalStore = useGlobalStore()
-  const { currentApp, globalHistoryRecord } = globalStore
-  const appStore = useAppStore()
-  if (currentApp === APP_NAME && to.fullPath !== from.fullPath && !appStore.noReportRoute) {
-    if (to.name === 'empty' && globalHistoryRecord.length > 0) {
-      return next(
-        globalHistoryRecord[globalHistoryRecord.length - 1].path.replace(`/${APP_NAME}`, '')
-      )
-    }
-    const inThisApp = !(to.path === '/empty')
+  const { currentApp } = globalStore
+  if (currentApp === APP_NAME && to.fullPath !== from.fullPath) {
+    const inThisApp = !(to.name === 'notFound')
     /** 如果返回的是空页面，并且存在历史记录。那么直接跳转到历史记录上去 */
     event.emit('microAppRouteJump', {
       to: {

@@ -18,7 +18,7 @@ const useMicro = () => {
   const microAppStore = useMicroAppStore()
   const { helpJumpInfo } = storeToRefs(microAppStore)
   const appStore = useAppStore()
-  const { pageJumpType, tabs, breadcrumb } = storeToRefs(appStore)
+  const { pageJumpType, tabs } = storeToRefs(appStore)
   const globalStore = useGlobalStore()
   const { microAppsInfo, globalHistoryRecord } = storeToRefs(globalStore)
   const {
@@ -40,6 +40,7 @@ const useMicro = () => {
       const preTab = tabs.value.find((item) => item.path === path || item.rawPath === path)
       if (preTab) {
         path = preTab.path ?? path
+        if (helpJumpInfo.value.to) helpJumpInfo.value.to.fullPath = preTab.path ?? path
       }
     }
     try {
@@ -80,18 +81,25 @@ const useMicro = () => {
   }
 
   /** 跳转到empty页面 */
-  const handleEmptyJump = (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
+  const handleEmptyJump = (from: RouteLocationNormalized) => {
     /** 判断是否是历史记录跳转 */
-    if (isHistoryJump(to.fullPath)) {
-      handleGlobalRouteBack(to, from, false)
-    }
+    if (globalHistoryRecord.value.length <= 0) return
+    handleGlobalRouteBack(
+      {
+        path: globalHistoryRecord.value[globalHistoryRecord.value.length - 1].path,
+        fullPath: globalHistoryRecord.value[globalHistoryRecord.value.length - 1].path
+      } as RouteLocationNormalized,
+      from,
+      false
+    )
   }
 
   /** 全局跳转 */
   const handleGlobalRouteJump = (
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,
-    jumped: boolean
+    jumped: boolean,
+    jumpType?: PageJumpType
   ) => {
     /** 是否成功跳转 */
     if (!jumped) {
@@ -107,7 +115,8 @@ const useMicro = () => {
         callback: async () => {
           await goMicroApp({
             path: to.fullPath,
-            newPoint: true
+            newPoint: true,
+            jumpType
           })
         }
       })
@@ -117,6 +126,7 @@ const useMicro = () => {
       if (isHelpJump) {
         from = helpJumpInfo.value.from!
       }
+
       /** 隐藏子应用 */
       if (parseMicroAppRoute(from.fullPath)[0] !== parseMicroAppRoute(to.fullPath)[0]) {
         hideMicroApp(parseMicroAppRoute(from.fullPath)[0])
@@ -139,7 +149,8 @@ const useMicro = () => {
   const handleGlobalRouteBack = (
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,
-    jumped: boolean
+    jumped: boolean,
+    jumpType?: PageJumpType
   ) => {
     /** 是否成功跳转 */
     if (!jumped) {
@@ -150,7 +161,8 @@ const useMicro = () => {
         callback: async () => {
           await goMicroApp({
             path: to.fullPath,
-            newPoint: true
+            newPoint: true,
+            jumpType
           })
         }
       })

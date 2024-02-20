@@ -14,4 +14,7 @@ import { useTheme } from '@/hooks'
 const { headerStyles, tabStyles, breadcrumbStyles, commonContentStyles, mainContentStyles } =
   useTheme()
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.basicLayout {
+}
+</style>

@@ -61,20 +61,20 @@ export const getMicroAppEntry = (appName: string): string | undefined => {
   return undefined
 }
 
-/** 判断路由是否是上下级关系 */
-export const isSubOrSupRoute = (r1?: string, r2?: string) => {
-  if (!r1 || !r2) return false
+/** 判断路由是否是上下级关系 0: 无关联; 1: r1是r2的下级; -1: r1是r2的上级 */
+export const isSubOrSupRoute = (r1?: string, r2?: string): number => {
+  if (!r1 || !r2) return 0
   const rr1 = r1.split('/')
   const rr2 = r2.split('/')
-  if (rr1.length === 0 || rr2.length === 0) return false
+  if (rr1.length === 0 || rr2.length === 0) return 0
   let i = 0
   let j = 0
   for (; i < rr1.length, j < rr2.length; i++, j++) {
     if (rr1[i] !== rr2[j]) break
   }
-  if (i === rr1.length && j === rr2.length - 1) return true
-  if (j === rr2.length && i === rr1.length - 1) return true
-  return false
+  if (i === rr1.length && j === rr2.length - 1) return 1
+  if (j === rr2.length && i === rr1.length - 1) return -1
+  return 0
 }
 
 /** 通过菜单路由查找对应的菜单路径  */

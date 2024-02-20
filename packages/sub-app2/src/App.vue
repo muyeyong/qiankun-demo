@@ -14,7 +14,6 @@ import { useGlobalStore } from './store'
 const router = useRouter()
 const globalStore = useGlobalStore()
 const { cacheComponents } = storeToRefs(globalStore)
-
 onMounted(() => {
   event.on('hideMicroApp', (args: { appName: string }) => {
     const { appName } = args

@@ -9,22 +9,22 @@
 <script setup lang="ts" name="menu">
 import { useAppStore } from '@/store'
 import { useMicro } from '@/hooks'
-import { taskQueue, TaskPriority } from '@/utils/taskQueue'
+import { RouteLocationNormalized } from 'vue-router'
 import { PageJumpType } from '@/constant'
 
 const appStore = useAppStore()
-const { menuData } = storeToRefs(appStore)
-const { goMicroApp } = useMicro()
+const { menuData, breadcrumb } = storeToRefs(appStore)
+const { handleGlobalRouteJump } = useMicro()
 
 const jump = (path?: string) => {
   if (!path) return
-  taskQueue.addTask({
-    id: path,
-    priority: TaskPriority.Medium,
-    callback: async () => {
-      await goMicroApp({ path, jumpType: PageJumpType.Menu })
-    }
-  })
+  const fromPath = breadcrumb.value.reverse().find((item) => item.isMenu)?.path
+  handleGlobalRouteJump(
+    { path, fullPath: path } as RouteLocationNormalized,
+    { path: fromPath, fullPath: fromPath } as RouteLocationNormalized,
+    false,
+    PageJumpType.Menu
+  )
 }
 </script>
 <style scoped lang="scss">

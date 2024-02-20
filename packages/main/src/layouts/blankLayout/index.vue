@@ -7,4 +7,7 @@
 <script setup lang="ts" name="blankLayout">
 import { GlobalContent } from '@/layouts/common/index'
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.blankLayout {
+}
+</style>

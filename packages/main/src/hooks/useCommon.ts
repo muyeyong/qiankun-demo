@@ -1,8 +1,8 @@
 import { getMenuDataReq } from '@/api'
 import { useAppStore, useGlobalStore, useMicroAppStore } from '../store'
-import event from '../event'
+import event from '@/event'
 import { RouteLocationNormalized } from 'vue-router'
-import { findMenuPathByRoute, isSubOrSupRoute } from '../utils'
+import { findMenuPathByRoute, isSubOrSupRoute, parseMicroAppRoute } from '../utils'
 import { PageJumpType } from '../constant'
 import { cloneDeep } from 'lodash-es'
 const useCommon = () => {
@@ -44,12 +44,22 @@ const useCommon = () => {
           rawPath: item.path
         }))
       } else if (isSubOrSupRoute(breadcrumb.value[breadcrumb.value.length - 1].path, to.fullPath)) {
-        /** 是否是子页面 */
-        breadcrumb.value[breadcrumb.value.length - 1].history.push({
-          path: breadcrumb.value[breadcrumb.value.length - 1].path,
-          label: breadcrumb.value[breadcrumb.value.length - 1].label
-        })
-        breadcrumb.value[breadcrumb.value.length - 1].path = to.fullPath
+        const result = isSubOrSupRoute(
+          breadcrumb.value[breadcrumb.value.length - 1].path,
+          to.fullPath
+        )
+        if (result === 1) {
+          /** 是否是子页面 */
+          breadcrumb.value[breadcrumb.value.length - 1].history.push({
+            path: breadcrumb.value[breadcrumb.value.length - 1].path,
+            label: breadcrumb.value[breadcrumb.value.length - 1].label
+          })
+          breadcrumb.value[breadcrumb.value.length - 1].path = to.fullPath
+        } else if (result === -1) {
+          const history = breadcrumb.value[breadcrumb.value.length - 1].history.pop()
+          breadcrumb.value[breadcrumb.value.length - 1].path = history?.path
+        }
+
         /** 跳转不知名页面 */
       } else if (menus && menus.length > 0) {
         /** 跳转到其他页面 */
@@ -122,7 +132,7 @@ const useCommon = () => {
 
   /** 隐藏子应用 */
   const hideMicroApp = (appName: string) => {
-    event.emit('hideMicroApp', appName)
+    event.emit('hideMicroApp', { appName })
   }
 
   /** 更新历史记录 */
@@ -138,15 +148,29 @@ const useCommon = () => {
         globalHistoryRecord.value.some((item) => item.path === from.fullPath)
       )
         return
-      const path = from.fullPath
-      globalHistoryRecord.value.push({
-        path
-      })
+      if (
+        breadcrumb.value.findIndex((item) =>
+          [...item.history.map((history) => history.path), item.path].includes(to.fullPath)
+        ) !== -1
+      ) {
+        globalHistoryRecord.value.splice(
+          globalHistoryRecord.value.findIndex((item) => item.path === to.fullPath)
+        )
+      } else {
+        const path = from.fullPath
+        globalHistoryRecord.value.push({
+          path
+        })
+      }
     } else {
       // 如果to存在面包屑之中：返回
-      if (breadcrumb.value.findIndex((item) => item.path === to.fullPath) !== -1) {
+      if (
+        breadcrumb.value.findIndex((item) =>
+          [...item.history.map((history) => history.path, item.path)].includes(to.fullPath)
+        ) !== -1
+      ) {
         globalHistoryRecord.value.splice(
-          globalHistoryRecord.value.findIndex((item) => item.path === to.fullPath) + 1
+          globalHistoryRecord.value.findIndex((item) => item.path === to.fullPath)
         )
       } else {
         // 替换
