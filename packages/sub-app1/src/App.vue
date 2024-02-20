@@ -21,15 +21,5 @@ onMounted(() => {
     }
   })
 })
-
-// const cacheComponents = computed(() => microAppsInfo.value.get(APP_NAME)?.components)
-
-watch(
-  () => globalStore.microAppsInfo,
-  (value) => {
-    console.log(value, 22)
-  },
-  { deep: true }
-)
 </script>
 <style scoped lang="scss"></style>
