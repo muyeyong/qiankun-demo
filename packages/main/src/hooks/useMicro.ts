@@ -21,13 +21,8 @@ const useMicro = () => {
   const { pageJumpType, tabs } = storeToRefs(appStore)
   const globalStore = useGlobalStore()
   const { microAppsInfo, globalHistoryRecord } = storeToRefs(globalStore)
-  const {
-    isHistoryJump,
-    updateMicroAppCachePage,
-    hideMicroApp,
-    updateHistoryRecord,
-    updateBreadcrumb
-  } = useCommon()
+  const { updateMicroAppCachePage, hideMicroApp, updateHistoryRecord, updateBreadcrumb } =
+    useCommon()
 
   /** 跳转子应用 */
   const goMicroApp = async (args: MicroAppJumpConfig) => {
@@ -172,11 +167,14 @@ const useMicro = () => {
       if (isHelpJump) {
         from = helpJumpInfo.value.from!
       }
+      /** 隐藏子应用 */
+      if (parseMicroAppRoute(from.fullPath)[0] !== parseMicroAppRoute(to.fullPath)[0]) {
+        hideMicroApp(parseMicroAppRoute(from.fullPath)[0])
+      }
       /** 更新历史记录 */
       updateHistoryRecord(to, from)
       /** 更新面包屑 */
       updateBreadcrumb(to, from)
-      /** 更新子应用的信息: 需要缓存那些页面 */
       /** 更新子应用的信息: 需要缓存那些页面 */
       updateMicroAppCachePage({
         appName: parseMicroAppRoute(from.fullPath)[0],

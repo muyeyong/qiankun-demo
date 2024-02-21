@@ -9,10 +9,11 @@ export interface MenuItem {
 
 /** 面包屑 */
 export interface Breadcrumb extends Pick<MenuItem, 'label' | 'path'> {
-  history: Pick<Breadcrumb, 'label' | 'path'>[]
+  history: Pick<Breadcrumb, 'label' | 'path' | 'componentName'>[]
   isMenu: boolean
   rawPath?: string
   rawLabel: string
+  componentName?: string
 }
 
 /** tab */

@@ -24,11 +24,15 @@ const { handleGlobalRouteBack, handleGlobalRouteJump } = useMicro()
 const back = () => {
   // 全局返回
   const lastRecord = globalHistoryRecord.value[globalHistoryRecord.value.length - 1]
-  const currPath = breadcrumb.value[breadcrumb.value.length - 1].path
+  const currBreadcrumb = breadcrumb.value[breadcrumb.value.length - 1]
   if (!lastRecord) return
   handleGlobalRouteBack(
     { path: lastRecord.path, fullPath: lastRecord.path } as RouteLocationNormalized,
-    { path: currPath, fullPath: currPath } as RouteLocationNormalized,
+    {
+      path: currBreadcrumb.path,
+      fullPath: currBreadcrumb.path,
+      name: currBreadcrumb.componentName
+    } as RouteLocationNormalized,
     false,
     PageJumpType.Back
   )
@@ -37,11 +41,15 @@ const back = () => {
 /** 切换tab */
 const switchTab = (tab: Tab) => {
   const { path } = tab
-  const currPage = breadcrumb.value.findLast((item) => item.isMenu)
-  if (currPage?.path === path) return
+  const currBreadcrumb = breadcrumb.value[breadcrumb.value.length - 1]
+  if (currBreadcrumb?.path === path || !path) return
   handleGlobalRouteJump(
     { path, fullPath: path } as RouteLocationNormalized,
-    { path: currPage?.path, fullPath: currPage?.path } as RouteLocationNormalized,
+    {
+      path: currBreadcrumb?.path,
+      fullPath: currBreadcrumb?.path,
+      name: currBreadcrumb.componentName
+    } as RouteLocationNormalized,
     false,
     PageJumpType.Tab
   )

@@ -1,8 +1,8 @@
 import { getMenuDataReq } from '@/api'
-import { useAppStore, useGlobalStore, useMicroAppStore } from '../store'
+import { useAppStore, useGlobalStore } from '../store'
 import event from '@/event'
 import { RouteLocationNormalized } from 'vue-router'
-import { findMenuPathByRoute, isSubOrSupRoute, parseMicroAppRoute } from '../utils'
+import { findMenuPathByRoute, isSubOrSupRoute } from '../utils'
 import { PageJumpType } from '../constant'
 import { cloneDeep } from 'lodash-es'
 const useCommon = () => {
@@ -28,17 +28,24 @@ const useCommon = () => {
   /** 更新面包屑 */
   const updateBreadcrumb = (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
     const preTab = tabs.value.find((item) => item.path === from.fullPath)
-    if (preTab) {
+    if (
+      preTab &&
+      [PageJumpType.Menu, PageJumpType.Tab].includes(pageJumpType.value) &&
+      breadcrumb.value.findIndex((item) =>
+        [...item.history.map((history) => history.path), item.path].includes(to.fullPath)
+      ) === -1
+    ) {
       preTab.breadcrumb = cloneDeep(breadcrumb.value)
     }
     const menus = findMenuPathByRoute(appStore.menuData, to.path)
     if (pageJumpType.value === PageJumpType.Default) {
       /** 判断to是不是菜单 */
       if (breadcrumb.value.length === 0 && menus && menus.length > 0) {
-        breadcrumb.value = menus.map((item) => ({
+        breadcrumb.value = menus.map((item, index) => ({
           label: item.label,
           path: item.path,
           history: [],
+          componentName: index === menus.length - 1 ? (to.name as string) : '',
           isMenu: true,
           rawLabel: item.label,
           rawPath: item.path
@@ -52,12 +59,15 @@ const useCommon = () => {
           /** 是否是子页面 */
           breadcrumb.value[breadcrumb.value.length - 1].history.push({
             path: breadcrumb.value[breadcrumb.value.length - 1].path,
-            label: breadcrumb.value[breadcrumb.value.length - 1].label
+            label: breadcrumb.value[breadcrumb.value.length - 1].label,
+            componentName: breadcrumb.value[breadcrumb.value.length - 1].componentName
           })
           breadcrumb.value[breadcrumb.value.length - 1].path = to.fullPath
+          breadcrumb.value[breadcrumb.value.length - 1].componentName = to.name as string
         } else if (result === -1) {
           const history = breadcrumb.value[breadcrumb.value.length - 1].history.pop()
           breadcrumb.value[breadcrumb.value.length - 1].path = history?.path
+          breadcrumb.value[breadcrumb.value.length - 1].componentName = history?.componentName
         }
       } else if (menus && menus.length > 0) {
         /** 跳转到其他页面 */
@@ -65,6 +75,7 @@ const useCommon = () => {
           label: menus[menus.length - 1].label,
           path: menus[menus.length - 1].path,
           history: [],
+          componentName: to.name as string,
           isMenu: true,
           rawLabel: menus[menus.length - 1].label,
           rawPath: menus[menus.length - 1].path
@@ -75,6 +86,7 @@ const useCommon = () => {
           label: to.meta.title as string,
           path: to.fullPath,
           history: [],
+          componentName: to.name as string,
           isMenu: false,
           rawLabel: to.meta.title as string,
           rawPath: to.fullPath
@@ -82,33 +94,37 @@ const useCommon = () => {
       }
     } else {
       // 返回
-      const index = breadcrumb.value.findIndex((item) => item.path === to.fullPath)
+      const index = breadcrumb.value.findIndex((item) =>
+        [...item.history.map((history) => history.path), item.path].includes(to.fullPath)
+      )
       if (index !== -1) {
         if (
           index === breadcrumb.value.length - 1 &&
           breadcrumb.value[breadcrumb.value.length - 1].history.length > 0
         ) {
           const lastBreadcrumb = breadcrumb.value[breadcrumb.value.length - 1]
-          lastBreadcrumb.path = lastBreadcrumb.history[lastBreadcrumb.history.length - 1].path
-          lastBreadcrumb.history.pop()
+          const history = lastBreadcrumb.history.pop()
+          lastBreadcrumb.path = history?.path
+          lastBreadcrumb.componentName = history?.componentName
         } else {
           breadcrumb.value.splice(index + 1)
         }
       } else {
         // 替换
         const target = tabs.value.find((item) => item.path === to.fullPath)
-        breadcrumb.value =
-          target?.breadcrumb ??
-          (menus &&
-            menus.map((item) => ({
-              label: item.label,
-              path: item.path,
-              history: [],
-              isMenu: true,
-              rawLabel: item.label,
-              rawPath: item.path
-            }))) ??
-          []
+        breadcrumb.value = target?.breadcrumb?.length
+          ? target?.breadcrumb
+          : (menus &&
+              menus.map((item, index) => ({
+                label: item.label,
+                path: item.path,
+                history: [],
+                componentName: index === menus.length - 1 ? (to.name as string) : '',
+                isMenu: true,
+                rawLabel: item.label,
+                rawPath: item.path
+              }))) ??
+            []
       }
     }
   }
@@ -138,7 +154,13 @@ const useCommon = () => {
   const updateHistoryRecord = (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
     // 更新tab的历史记录
     const preTab = tabs.value.find((item) => item.path === from.fullPath)
-    if (preTab) {
+    if (
+      preTab &&
+      [PageJumpType.Menu, PageJumpType.Tab].includes(pageJumpType.value) &&
+      breadcrumb.value.findIndex((item) =>
+        [...item.history.map((history) => history.path), item.path].includes(to.fullPath)
+      ) === -1
+    ) {
       preTab.globalHistoryRecord = cloneDeep(globalHistoryRecord.value)
     }
     if (pageJumpType.value === PageJumpType.Default) {
@@ -165,7 +187,7 @@ const useCommon = () => {
       // 如果to存在面包屑之中：返回
       if (
         breadcrumb.value.findIndex((item) =>
-          [...item.history.map((history) => history.path, item.path)].includes(to.fullPath)
+          [...item.history.map((history) => history.path), item.path].includes(to.fullPath)
         ) !== -1
       ) {
         globalHistoryRecord.value.splice(
