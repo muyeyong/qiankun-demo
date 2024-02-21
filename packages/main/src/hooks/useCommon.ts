@@ -59,8 +59,6 @@ const useCommon = () => {
           const history = breadcrumb.value[breadcrumb.value.length - 1].history.pop()
           breadcrumb.value[breadcrumb.value.length - 1].path = history?.path
         }
-
-        /** 跳转不知名页面 */
       } else if (menus && menus.length > 0) {
         /** 跳转到其他页面 */
         breadcrumb.value.push({
@@ -72,6 +70,7 @@ const useCommon = () => {
           rawPath: menus[menus.length - 1].path
         })
       } else {
+        /** 跳转不知名页面 */
         breadcrumb.value.push({
           label: to.meta.title as string,
           path: to.fullPath,

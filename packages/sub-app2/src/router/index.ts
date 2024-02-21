@@ -57,29 +57,30 @@ router.beforeEach((to, from, next) => {
   const globalStore = useGlobalStore()
   const { currentApp, globalHistoryRecord } = globalStore
   const appStore = useAppStore()
+  const toInThisApp = to.name !== 'notFound'
   if (currentApp === APP_NAME && to.fullPath !== from.fullPath && !appStore.noReportRoute) {
     if (to.name === 'empty' && globalHistoryRecord.length > 0) {
+      const nextPath = globalHistoryRecord[globalHistoryRecord.length - 1].path
       return next(
-        globalHistoryRecord[globalHistoryRecord.length - 1].path.replace(`/${APP_NAME}`, '')
+        nextPath.startsWith(`/${APP_NAME}`) ? nextPath.replace(`/${APP_NAME}`, '') : nextPath
       )
     }
-    const inThisApp = !(to.path === '/empty')
     /** 如果返回的是空页面，并且存在历史记录。那么直接跳转到历史记录上去 */
     event.emit('microAppRouteJump', {
       to: {
         ...to,
-        path: inThisApp ? `/${APP_NAME}${to.path}` : to.path,
-        fullPath: inThisApp ? `/${APP_NAME}${to.fullPath}` : to.fullPath
+        path: toInThisApp ? `/${APP_NAME}${to.path}` : to.path,
+        fullPath: toInThisApp ? `/${APP_NAME}${to.fullPath}` : to.fullPath
       },
       from: {
         ...from,
-        path: inThisApp ? `/${APP_NAME}${from.path}` : from.path,
-        fullPath: inThisApp ? `/${APP_NAME}${from.fullPath}` : from.fullPath
+        path: `/${APP_NAME}${from.path}`,
+        fullPath: `/${APP_NAME}${from.fullPath}`
       },
-      jumped: inThisApp
+      jumped: toInThisApp
     })
   }
-  if (to.name === 'noFound') next(false)
+  if (!toInThisApp) next(false)
   else next()
 })
 

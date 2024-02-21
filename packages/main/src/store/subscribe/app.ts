@@ -37,7 +37,7 @@ export default function subscribeAppStore() {
     watch(
       () => appStore.breadcrumb,
       (value) => {
-        const target = value.reverse().find((item) => item.isMenu)
+        const target = value.findLast((item) => item.isMenu)
         if (target) {
           if (!appStore.tabs.some((item) => item.rawPath === target.rawPath)) {
             appStore.tabs.push({

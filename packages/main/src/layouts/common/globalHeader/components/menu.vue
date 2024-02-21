@@ -18,7 +18,7 @@ const { handleGlobalRouteJump } = useMicro()
 
 const jump = (path?: string) => {
   if (!path) return
-  const fromPath = breadcrumb.value.reverse().find((item) => item.isMenu)?.path
+  const fromPath = breadcrumb.value.findLast((item) => item.isMenu)?.path
   handleGlobalRouteJump(
     { path, fullPath: path } as RouteLocationNormalized,
     { path: fromPath, fullPath: fromPath } as RouteLocationNormalized,
